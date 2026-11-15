@@ -42,6 +42,8 @@ def test_fact_store_volatile_expiration() -> None:
     time.sleep(0.15)
     assert store.has("get_memory_summary") is False
     assert store.get("get_memory_summary") is None
+    assert len(store.all_envelopes(include_expired=True)) == 1
+    assert len(store.all_envelopes(include_expired=False)) == 0
 
 
 def test_fact_store_get_index() -> None:

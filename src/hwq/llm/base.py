@@ -28,4 +28,8 @@ def create_llm_client(config: Config) -> LLMClient:
 
     if config.llm == "scripted" or config.demo:
         return ScriptedClient()
-    return OllamaClient(url=config.ollama_url, model=config.ollama_model)
+    return OllamaClient(
+        url=config.ollama_url,
+        model=config.ollama_model,
+        timeout_s=getattr(config, "ollama_timeout", 180.0),
+    )

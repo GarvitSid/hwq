@@ -86,3 +86,7 @@ def test_defaults_audit_precedence() -> None:
     assert cfg_cli.resolved_backend == "linux"
     assert cfg_cli.llm == "ollama"
     assert cfg_cli.show_tools is False
+
+    # 3. Model override
+    cfg_model = load_config(cli_model="mistral")
+    assert cfg_model.ollama_model == "mistral"

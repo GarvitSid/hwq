@@ -90,6 +90,10 @@ def main(
         str | None,
         typer.Option("--llm", help="LLM client to use: ollama or scripted."),
     ] = None,
+    model: Annotated[
+        str | None,
+        typer.Option("--model", "-m", help="Ollama model name (default: llama3.2)."),
+    ] = None,
     show_tools: Annotated[
         bool,
         typer.Option("--show-tools", help="Print tool calls with status and confidence."),
@@ -125,6 +129,7 @@ def main(
         cli_backend=valid_backend,
         cli_fixture=fixture,
         cli_llm=valid_llm,
+        cli_model=model,
         cli_show_tools=show_tools if show_tools else None,
         cli_demo=demo if demo else None,
     )
@@ -389,6 +394,10 @@ def ask(
         str | None,
         typer.Option("--llm", help="Override LLM client: ollama or scripted."),
     ] = None,
+    model: Annotated[
+        str | None,
+        typer.Option("--model", "-m", help="Override Ollama model name (default: llama3.2)."),
+    ] = None,
     show_tools: Annotated[
         bool,
         typer.Option("--show-tools", help="Print tool calls with status and confidence."),
@@ -396,7 +405,13 @@ def ask(
 ) -> None:
     """Ask a single question about your Linux hardware and exit (SRS 4.1, FR-CLI-1)."""
     cfg: Config = ctx.obj
-    if fixture is not None or backend is not None or llm is not None or show_tools:
+    if (
+        fixture is not None
+        or backend is not None
+        or llm is not None
+        or model is not None
+        or show_tools
+    ):
         valid_llm: LLMChoice | None = None
         if llm in ("ollama", "scripted"):
             valid_llm = llm  # type: ignore[assignment]
@@ -404,6 +419,7 @@ def ask(
             cli_backend=_resolve_cli_backend(backend, fixture or cfg.fixture, cfg.backend),
             cli_fixture=fixture if fixture else cfg.fixture,
             cli_llm=valid_llm if valid_llm is not None else cfg.llm,
+            cli_model=model if model else cfg.ollama_model,
             cli_show_tools=show_tools if show_tools else cfg.show_tools,
             cli_demo=cfg.demo,
         )

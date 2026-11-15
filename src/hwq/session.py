@@ -41,17 +41,16 @@ class FactStore:
             inserted_at=time.monotonic(),
         )
 
-    def get(self, tool_name: str) -> FactEnvelope[Any] | None:
+    def get(self, tool_name: str, check_ttl: bool = True) -> FactEnvelope[Any] | None:
         """Retrieve the latest envelope for a tool if not expired."""
         entry = self._entries.get(tool_name)
         if entry is None:
             return None
 
         # Check TTL for volatile tools (FR-CTX-1: volatile meminfo expires after 5s)
-        if tool_name in VOLATILE_TOOLS:
+        if check_ttl and tool_name in VOLATILE_TOOLS:
             elapsed = time.monotonic() - entry.inserted_at
             if elapsed > self.volatile_ttl_s:
-                del self._entries[tool_name]
                 return None
 
         return entry.envelope
@@ -60,11 +59,11 @@ class FactStore:
         """Return True if a fresh fact exists for tool_name."""
         return self.get(tool_name) is not None
 
-    def all_envelopes(self) -> list[FactEnvelope[Any]]:
-        """Return all valid, non-expired envelopes."""
+    def all_envelopes(self, include_expired: bool = True) -> list[FactEnvelope[Any]]:
+        """Return all valid envelopes (by default including volatile facts gathered in session)."""
         envs: list[FactEnvelope[Any]] = []
         for name in list(self._entries.keys()):
-            env = self.get(name)
+            env = self.get(name, check_ttl=not include_expired)
             if env is not None:
                 envs.append(env)
         return envs

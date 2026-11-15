@@ -14,7 +14,8 @@ ResolvedBackend = Literal["linux", "replay"]
 LLMChoice = Literal["ollama", "scripted"]
 
 DEFAULT_OLLAMA_URL = "http://127.0.0.1:11434"
-DEFAULT_OLLAMA_MODEL = "llama3"
+DEFAULT_OLLAMA_MODEL = "llama3.2:1b"
+DEFAULT_OLLAMA_TIMEOUT = 180.0
 
 
 def resolve_backend(
@@ -45,6 +46,7 @@ class Config(BaseModel):
     llm: LLMChoice = "ollama"
     ollama_url: str = Field(default=DEFAULT_OLLAMA_URL)
     ollama_model: str = Field(default=DEFAULT_OLLAMA_MODEL)
+    ollama_timeout: float = Field(default=DEFAULT_OLLAMA_TIMEOUT)
     show_tools: bool = False
     demo: bool = False
 
@@ -55,6 +57,7 @@ def load_config(
     cli_backend: BackendChoice | None = None,
     cli_fixture: str | None = None,
     cli_llm: LLMChoice | None = None,
+    cli_model: str | None = None,
     cli_show_tools: bool | None = None,
     cli_demo: bool | None = None,
     platform: str | None = None,
@@ -126,7 +129,19 @@ def load_config(
     resolved = resolve_backend(backend_val, platform=platform)
 
     ollama_url = env_vars.get("HWQ_OLLAMA_URL", DEFAULT_OLLAMA_URL).strip()
-    ollama_model = env_vars.get("HWQ_OLLAMA_MODEL", DEFAULT_OLLAMA_MODEL).strip()
+    raw_model = (
+        cli_model
+        if cli_model is not None
+        else env_vars.get("HWQ_OLLAMA_MODEL", DEFAULT_OLLAMA_MODEL)
+    )
+    ollama_model = raw_model.strip() if raw_model else DEFAULT_OLLAMA_MODEL
+
+    try:
+        ollama_timeout = float(
+            env_vars.get("HWQ_OLLAMA_TIMEOUT", str(DEFAULT_OLLAMA_TIMEOUT)).strip()
+        )
+    except ValueError:
+        ollama_timeout = DEFAULT_OLLAMA_TIMEOUT
 
     return Config(
         backend=backend_val,
@@ -135,6 +150,7 @@ def load_config(
         llm=llm_val,
         ollama_url=ollama_url or DEFAULT_OLLAMA_URL,
         ollama_model=ollama_model or DEFAULT_OLLAMA_MODEL,
+        ollama_timeout=ollama_timeout,
         show_tools=show_tools_val,
         demo=demo_val,
     )

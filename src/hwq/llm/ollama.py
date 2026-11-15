@@ -18,8 +18,8 @@ class OllamaClient:
     def __init__(
         self,
         url: str = "http://127.0.0.1:11434",
-        model: str = "llama3",
-        timeout_s: float = 30.0,
+        model: str = "llama3.2:1b",
+        timeout_s: float = 180.0,
         num_ctx: int = 4096,
         temperature: float = 0.2,
     ) -> None:
@@ -74,7 +74,8 @@ class OllamaClient:
             if err.code == 404:
                 raise OllamaModelError(
                     f"Model '{self.model}' not found on Ollama server. "
-                    f"Run 'ollama pull {self.model}' or specify a different model via --llm."
+                    f"Run 'ollama pull {self.model}' (e.g. 'llama3.2:1b' for lightweight) "
+                    f"or specify a different model via --model, or use --llm scripted."
                 ) from err
             raise OllamaConnectionError(
                 f"Ollama server returned HTTP {err.code}: {err_body}"
