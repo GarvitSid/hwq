@@ -264,18 +264,17 @@ def discover_fixtures(search_dirs: list[Path] | None = None) -> dict[str, Path]:
         if "HWQ_FIXTURES_DIR" in os.environ:
             candidate_dirs.append(Path(os.environ["HWQ_FIXTURES_DIR"]))
 
-        # 1. Check packaged fixtures (site-packages/hwq/fixtures or src/hwq/fixtures)
-        pkg_dir = Path(__file__).resolve().parent.parent / "fixtures"
-        candidate_dirs.append(pkg_dir)
-
-        # 2. Check current working directory (e.g. /opt/render/project/src)
+        # 1. Check current working directory or repo root (development / test runner)
         cwd = Path.cwd()
         candidate_dirs.append(cwd / "tests" / "fixtures")
         candidate_dirs.append(cwd / "fixtures")
 
-        # 3. Check git repo root if running from source
         root_dir = Path(__file__).resolve().parent.parent.parent.parent
         candidate_dirs.append(root_dir / "tests" / "fixtures")
+
+        # 2. Check packaged fixtures (site-packages/hwq/fixtures or src/hwq/fixtures)
+        pkg_dir = Path(__file__).resolve().parent.parent / "fixtures"
+        candidate_dirs.append(pkg_dir)
 
         dirs = candidate_dirs
 

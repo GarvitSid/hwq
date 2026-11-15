@@ -1,2 +1,3 @@
 * text=auto
 tests/fixtures/** text eol=lf
+src/hwq/fixtures/** text eol=lf
