@@ -1,0 +1,13 @@
+Slot:	00:02.0
+Class:	VGA compatible controller [0300]
+Vendor:	Intel Corporation [8086]
+Device:	AlderLake-S GT1 [7420]
+SVendor:	ASUSTeK Computer Inc. [1043]
+SDevice:	Device [8694]
+
+Slot:	01:00.0
+Class:	VGA compatible controller [0300]
+Vendor:	NVIDIA Corporation [10de]
+Device:	GA106 [GeForce RTX 3060] [2503]
+SVendor:	EVGA Corporation [3842]
+SDevice:	Device [3657]

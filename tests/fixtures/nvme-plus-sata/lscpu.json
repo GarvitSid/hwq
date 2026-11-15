@@ -1,0 +1,7 @@
+{
+   "lscpu": [
+      {"field": "Architecture:", "data": "x86_64"},
+      {"field": "CPU(s):", "data": "12"},
+      {"field": "Model name:", "data": "AMD Ryzen 5 5600X 6-Core Processor"}
+   ]
+}

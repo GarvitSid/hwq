@@ -1,0 +1,22 @@
+{
+  "schema": 1,
+  "name": "nvme-plus-sata",
+  "synthetic": true,
+  "entries": {
+    "cmd:lsblk -J -b -d -o NAME,TYPE,SIZE,MODEL,ROTA,TRAN,RM,HOTPLUG": {
+      "file": "lsblk.json",
+      "status": "ok",
+      "exit_code": 0
+    },
+    "cmd:lscpu -J": {
+      "file": "lscpu.json",
+      "status": "ok",
+      "exit_code": 0
+    },
+    "file:/proc/meminfo": {
+      "file": "meminfo.txt",
+      "status": "ok",
+      "exit_code": 0
+    }
+  }
+}

@@ -1,0 +1,7 @@
+{
+   "lscpu": [
+      {"field": "Architecture:", "data": "x86_64"},
+      {"field": "CPU(s):", "data": "16"},
+      {"field": "Model name:", "data": "12th Gen Intel(R) Core(TM) i7-12700K"}
+   ]
+}

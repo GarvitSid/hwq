@@ -1,0 +1,23 @@
+{
+  "schema": 1,
+  "name": "vm-no-dmi",
+  "synthetic": true,
+  "entries": {
+    "cmd:lscpu -J": {
+      "file": "lscpu.json",
+      "status": "ok",
+      "exit_code": 0
+    },
+    "cmd:dmidecode -t memory": {
+      "file": "dmidecode_memory.txt",
+      "status": "error",
+      "exit_code": 1,
+      "privileged": true
+    },
+    "file:/proc/meminfo": {
+      "file": "meminfo.txt",
+      "status": "ok",
+      "exit_code": 0
+    }
+  }
+}

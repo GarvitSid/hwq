@@ -1,0 +1,22 @@
+{
+  "schema": 1,
+  "name": "igpu-amd",
+  "synthetic": true,
+  "entries": {
+    "cmd:lscpu -J": {
+      "file": "lscpu.json",
+      "status": "ok",
+      "exit_code": 0
+    },
+    "cmd:lspci -mm -nn": {
+      "file": "lspci.txt",
+      "status": "ok",
+      "exit_code": 0
+    },
+    "file:/proc/meminfo": {
+      "file": "meminfo.txt",
+      "status": "ok",
+      "exit_code": 0
+    }
+  }
+}

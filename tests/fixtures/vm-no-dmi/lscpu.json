@@ -1,0 +1,9 @@
+{
+   "lscpu": [
+      {"field": "Architecture:", "data": "x86_64"},
+      {"field": "CPU(s):", "data": "2"},
+      {"field": "Model name:", "data": "Common KVM processor"},
+      {"field": "Hypervisor vendor:", "data": "KVM"},
+      {"field": "Virtualization type:", "data": "full"}
+   ]
+}

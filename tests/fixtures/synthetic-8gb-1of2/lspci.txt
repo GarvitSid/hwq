@@ -1,0 +1,7 @@
+Slot:	00:02.0
+Class:	VGA compatible controller [0300]
+Vendor:	Intel Corporation [8086]
+Device:	TigerLake-LP GT2 [Iris Xe Graphics] [9a49]
+SVendor:	Dell [1028]
+SDevice:	Device [0a3a]
+PhySlot:	0

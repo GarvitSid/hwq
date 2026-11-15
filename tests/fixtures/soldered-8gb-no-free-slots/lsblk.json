@@ -1,0 +1,14 @@
+{
+   "blockdevices": [
+      {
+         "name": "mmcblk0",
+         "type": "disk",
+         "size": 62537072640,
+         "model": "MMC 64GB",
+         "rota": false,
+         "tran": null,
+         "rm": false,
+         "hotplug": false
+      }
+   ]
+}

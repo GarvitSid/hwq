@@ -1,0 +1,7 @@
+{
+   "lscpu": [
+      {"field": "Architecture:", "data": "x86_64"},
+      {"field": "CPU(s):", "data": "4"},
+      {"field": "Model name:", "data": "Intel(R) Core(TM) i3-10100 CPU @ 3.60GHz"}
+   ]
+}
