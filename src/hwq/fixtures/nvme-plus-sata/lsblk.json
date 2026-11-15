@@ -1,0 +1,24 @@
+{
+   "blockdevices": [
+      {
+         "name": "nvme0n1",
+         "type": "disk",
+         "size": 512110190592,
+         "model": "Samsung SSD 970 EVO Plus 500GB",
+         "rota": false,
+         "tran": "nvme",
+         "rm": false,
+         "hotplug": false
+      },
+      {
+         "name": "sda",
+         "type": "disk",
+         "size": 1000204886016,
+         "model": "ST1000DM010-2EP102",
+         "rota": true,
+         "tran": "sata",
+         "rm": false,
+         "hotplug": false
+      }
+   ]
+}

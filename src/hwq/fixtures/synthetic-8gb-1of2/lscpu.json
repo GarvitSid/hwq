@@ -1,0 +1,19 @@
+{
+   "lscpu": [
+      {"field": "Architecture:", "data": "x86_64"},
+      {"field": "CPU op-mode(s):", "data": "32-bit, 64-bit"},
+      {"field": "Address sizes:", "data": "39 bits physical, 48 bits virtual"},
+      {"field": "Byte Order:", "data": "Little Endian"},
+      {"field": "CPU(s):", "data": "8"},
+      {"field": "On-line CPU(s) list:", "data": "0-7"},
+      {"field": "Vendor ID:", "data": "GenuineIntel"},
+      {"field": "Model name:", "data": "11th Gen Intel(R) Core(TM) i5-1135G7 @ 2.40GHz"},
+      {"field": "CPU family:", "data": "6"},
+      {"field": "Model:", "data": "140"},
+      {"field": "Thread(s) per core:", "data": "2"},
+      {"field": "Core(s) per socket:", "data": "4"},
+      {"field": "Socket(s):", "data": "1"},
+      {"field": "CPU max MHz:", "data": "4200.0000"},
+      {"field": "CPU min MHz:", "data": "400.0000"}
+   ]
+}

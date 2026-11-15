@@ -1,0 +1,14 @@
+{
+   "blockdevices": [
+      {
+         "name": "nvme0n1",
+         "type": "disk",
+         "size": 256060514304,
+         "model": "KIOXIA KBG40ZNS256G NVMe",
+         "rota": false,
+         "tran": "nvme",
+         "rm": false,
+         "hotplug": false
+      }
+   ]
+}

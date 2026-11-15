@@ -1,0 +1,53 @@
+{
+  "schema": 1,
+  "name": "synthetic-8gb-1of2",
+  "synthetic": true,
+  "entries": {
+    "cmd:lscpu -J": {
+      "file": "lscpu.json",
+      "status": "ok",
+      "exit_code": 0
+    },
+    "cmd:dmidecode -t memory": {
+      "file": "dmidecode_memory.txt",
+      "status": "ok",
+      "exit_code": 0,
+      "privileged": true
+    },
+    "cmd:lsblk -J -b -d -o NAME,TYPE,SIZE,MODEL,ROTA,TRAN,RM,HOTPLUG": {
+      "file": "lsblk.json",
+      "status": "ok",
+      "exit_code": 0
+    },
+    "cmd:lspci -mm -nn": {
+      "file": "lspci.txt",
+      "status": "ok",
+      "exit_code": 0
+    },
+    "file:/proc/meminfo": {
+      "file": "meminfo.txt",
+      "status": "ok",
+      "exit_code": 0
+    },
+    "file:/etc/os-release": {
+      "file": "os_release.txt",
+      "status": "ok",
+      "exit_code": 0
+    },
+    "file:/proc/sys/kernel/osrelease": {
+      "file": "kernel_release.txt",
+      "status": "ok",
+      "exit_code": 0
+    },
+    "file:/sys/class/dmi/id/product_name": {
+      "file": "product_name.txt",
+      "status": "ok",
+      "exit_code": 0
+    },
+    "file:/sys/class/dmi/id/sys_vendor": {
+      "file": "sys_vendor.txt",
+      "status": "ok",
+      "exit_code": 0
+    }
+  }
+}

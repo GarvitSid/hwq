@@ -1,0 +1,28 @@
+{
+  "schema": 1,
+  "name": "soldered-8gb-no-free-slots",
+  "synthetic": true,
+  "entries": {
+    "cmd:lscpu -J": {
+      "file": "lscpu.json",
+      "status": "ok",
+      "exit_code": 0
+    },
+    "cmd:dmidecode -t memory": {
+      "file": "dmidecode_memory.txt",
+      "status": "ok",
+      "exit_code": 0,
+      "privileged": true
+    },
+    "cmd:lsblk -J -b -d -o NAME,TYPE,SIZE,MODEL,ROTA,TRAN,RM,HOTPLUG": {
+      "file": "lsblk.json",
+      "status": "ok",
+      "exit_code": 0
+    },
+    "file:/proc/meminfo": {
+      "file": "meminfo.txt",
+      "status": "ok",
+      "exit_code": 0
+    }
+  }
+}

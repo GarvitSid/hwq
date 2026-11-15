@@ -260,9 +260,24 @@ def discover_fixtures(search_dirs: list[Path] | None = None) -> dict[str, Path]:
     """
     dirs = search_dirs
     if dirs is None:
+        candidate_dirs: list[Path] = []
+        if "HWQ_FIXTURES_DIR" in os.environ:
+            candidate_dirs.append(Path(os.environ["HWQ_FIXTURES_DIR"]))
+
+        # 1. Check packaged fixtures (site-packages/hwq/fixtures or src/hwq/fixtures)
+        pkg_dir = Path(__file__).resolve().parent.parent / "fixtures"
+        candidate_dirs.append(pkg_dir)
+
+        # 2. Check current working directory (e.g. /opt/render/project/src)
+        cwd = Path.cwd()
+        candidate_dirs.append(cwd / "tests" / "fixtures")
+        candidate_dirs.append(cwd / "fixtures")
+
+        # 3. Check git repo root if running from source
         root_dir = Path(__file__).resolve().parent.parent.parent.parent
-        fixtures_dir = root_dir / "tests" / "fixtures"
-        dirs = [fixtures_dir]
+        candidate_dirs.append(root_dir / "tests" / "fixtures")
+
+        dirs = candidate_dirs
 
     discovered: dict[str, Path] = {}
     for base in dirs:
@@ -271,9 +286,10 @@ def discover_fixtures(search_dirs: list[Path] | None = None) -> dict[str, Path]:
         for index_path in base.glob("*/index.json"):
             try:
                 data = json.loads(index_path.read_text(encoding="utf-8"))
-                if data.get("schema") == 1:
+                if data.get("schema") == 1 or data.get("schema_version") == 1:
                     name = data.get("name", index_path.parent.name)
-                    discovered[name] = index_path.parent
+                    if name not in discovered:
+                        discovered[name] = index_path.parent
             except Exception:
                 continue
 
@@ -285,6 +301,16 @@ def load_fixture_backend(fixture_name_or_path: str | Path) -> ReplayBackend:
     path_candidate = Path(fixture_name_or_path)
     if path_candidate.is_dir() and (path_candidate / "index.json").is_file():
         return ReplayBackend(path_candidate)
+
+    # Check relative to cwd
+    cwd_candidate = Path.cwd() / "tests" / "fixtures" / fixture_name_or_path
+    if cwd_candidate.is_dir() and (cwd_candidate / "index.json").is_file():
+        return ReplayBackend(cwd_candidate)
+
+    # Check relative to package fixtures
+    pkg_candidate = Path(__file__).resolve().parent.parent / "fixtures" / fixture_name_or_path
+    if pkg_candidate.is_dir() and (pkg_candidate / "index.json").is_file():
+        return ReplayBackend(pkg_candidate)
 
     fixtures = discover_fixtures()
     str_name = str(fixture_name_or_path)
