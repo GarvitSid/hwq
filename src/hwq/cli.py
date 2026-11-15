@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import os
 import urllib.error
 import urllib.request
 from typing import Annotated, Any
@@ -798,6 +799,53 @@ def snapshot(
     """Record raw system outputs into a fixture folder for offline replay."""
     out_path = take_snapshot(out)
     console.print(f"Snapshot recorded successfully to {out_path}")
+
+
+@app.command()
+def serve(
+    ctx: typer.Context,
+    host: Annotated[
+        str,
+        typer.Option("--host", "-h", help="Bind host address."),
+    ] = "0.0.0.0",
+    port: Annotated[
+        int | None,
+        typer.Option("--port", "-p", help="Bind port number (defaults to PORT env or 10000)."),
+    ] = None,
+    fixture: Annotated[
+        str | None,
+        typer.Option("--fixture", help="Default fixture for replay."),
+    ] = None,
+    backend: Annotated[
+        str | None,
+        typer.Option("--backend", help="Backend choice: auto, linux, replay."),
+    ] = None,
+    llm: Annotated[
+        str | None,
+        typer.Option("--llm", help="LLM client choice: ollama or scripted."),
+    ] = None,
+    model: Annotated[
+        str | None,
+        typer.Option("--model", "-m", help="Ollama model name."),
+    ] = None,
+) -> None:
+    """Run lightweight HTTP web service and REST API for cloud deployments (e.g. Render)."""
+    from hwq.web import run_server
+
+    cfg: Config = ctx.obj
+    if fixture is not None or backend is not None or llm is not None or model is not None:
+        valid_llm: LLMChoice | None = None
+        if llm in ("ollama", "scripted"):
+            valid_llm = llm  # type: ignore[assignment]
+        cfg = load_config(
+            cli_backend=_resolve_cli_backend(backend, fixture or cfg.fixture, cfg.backend),
+            cli_fixture=fixture if fixture else cfg.fixture,
+            cli_llm=valid_llm if valid_llm is not None else cfg.llm,
+            cli_model=model if model else cfg.ollama_model,
+        )
+
+    resolved_port = port if port is not None else int(os.environ.get("PORT", "10000"))
+    run_server(host=host, port=resolved_port, config=cfg)
 
 
 if __name__ == "__main__":
