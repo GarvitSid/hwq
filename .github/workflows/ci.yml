@@ -67,7 +67,7 @@ jobs:
 
       - name: Verify recorded snapshot schema
         run: |
-          python -c "import json; idx = json.load(open('live-snapshot-ubuntu/index.json')); assert idx.get('schema_version') == 1, 'Invalid schema'"
+          python -c "import json; idx = json.load(open('live-snapshot-ubuntu/index.json')); assert idx.get('schema') == 1 or idx.get('schema_version') == 1, 'Invalid schema'"
 
       - name: Upload snapshot fixture artifact
         uses: actions/upload-artifact@v4

@@ -151,13 +151,35 @@ class ScriptedClient:
                 )
 
             # CPU check
-            if "get_cpu_info" in combined_tool_text and "i5-1135g7" in combined_tool_text.lower():
-                return LLMReply(
-                    content=(
-                        "Your CPU is an 11th Gen Intel Core i5-1135G7 with 4 cores and 8 threads."
-                    ),
-                    tool_calls=[],
-                )
+            if "get_cpu_info" in combined_tool_text:
+                if "i5-1135g7" in combined_tool_text.lower():
+                    return LLMReply(
+                        content=(
+                            "Your CPU is an 11th Gen Intel Core i5-1135G7 "
+                            "with 4 cores and 8 threads."
+                        ),
+                        tool_calls=[],
+                    )
+                import json
+                import re
+                try:
+                    m = re.search(
+                        r"<hardware_fact[^>]*tool=\"get_cpu_info\"[^>]*>(.*?)</hardware_fact>",
+                        combined_tool_text,
+                        re.DOTALL,
+                    )
+                    payload = m.group(1) if m else combined_tool_text
+                    parsed = json.loads(payload)
+                    cpu_data = parsed.get("data", {})
+                    model = cpu_data.get("model_name", "CPU")
+                    cores = cpu_data.get("cores", 4)
+                    threads = cpu_data.get("threads", cores)
+                    return LLMReply(
+                        content=f"Your CPU is an {model} with {cores} cores and {threads} threads.",
+                        tool_calls=[],
+                    )
+                except Exception:
+                    pass
 
             return LLMReply(
                 content="Based on the retrieved system data, here are the hardware details.",

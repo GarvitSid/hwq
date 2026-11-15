@@ -53,6 +53,18 @@ def version_callback(value: bool) -> None:
         raise typer.Exit()
 
 
+def _resolve_cli_backend(
+    backend: str | None,
+    fixture: str | None,
+    current_default: BackendChoice,
+) -> BackendChoice:
+    if backend in ("auto", "linux", "replay"):
+        return backend  # type: ignore[return-value]
+    if fixture:
+        return "replay"
+    return current_default
+
+
 @app.callback(invoke_without_command=True)
 def main(
     ctx: typer.Context,
@@ -389,7 +401,7 @@ def ask(
         if llm in ("ollama", "scripted"):
             valid_llm = llm  # type: ignore[assignment]
         cfg = load_config(
-            cli_backend=backend if backend in ("auto", "linux", "replay") else cfg.backend,  # type: ignore[arg-type]
+            cli_backend=_resolve_cli_backend(backend, fixture or cfg.fixture, cfg.backend),
             cli_fixture=fixture if fixture else cfg.fixture,
             cli_llm=valid_llm if valid_llm is not None else cfg.llm,
             cli_show_tools=show_tools if show_tools else cfg.show_tools,
@@ -440,7 +452,7 @@ def facts(
     cfg: Config = ctx.obj
     if fixture is not None or backend is not None:
         cfg = load_config(
-            cli_backend=backend if backend in ("auto", "linux", "replay") else cfg.backend,  # type: ignore[arg-type]
+            cli_backend=_resolve_cli_backend(backend, fixture or cfg.fixture, cfg.backend),
             cli_fixture=fixture if fixture else cfg.fixture,
             cli_llm=cfg.llm,
         )
@@ -515,7 +527,7 @@ def doctor(
     cfg: Config = ctx.obj
     if fixture is not None or backend is not None:
         cfg = load_config(
-            cli_backend=backend if backend in ("auto", "linux", "replay") else cfg.backend,  # type: ignore[arg-type]
+            cli_backend=_resolve_cli_backend(backend, fixture or cfg.fixture, cfg.backend),
             cli_fixture=fixture if fixture else cfg.fixture,
             cli_llm=cfg.llm,
         )

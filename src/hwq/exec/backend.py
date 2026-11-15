@@ -244,6 +244,7 @@ class RecordingBackend:
         """Write index.json to target fixture directory."""
         index_data = {
             "schema": 1,
+            "schema_version": 1,
             "name": self.fixture_name,
             "synthetic": self.synthetic,
             "entries": self.entries,

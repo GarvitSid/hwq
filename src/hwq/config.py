@@ -88,6 +88,10 @@ def load_config(
         raw_fixture = env_vars.get("HWQ_FIXTURE", "").strip()
         fixture_val = raw_fixture if raw_fixture else None
 
+    # If fixture is specified and backend was not explicitly forced, default backend to replay
+    if fixture_val is not None and cli_backend is None and "HWQ_BACKEND" not in env_vars:
+        backend_val = "replay"
+
     # LLM selection (FR-ARCH-2) - default is ALWAYS ollama
     llm_val: LLMChoice
     if cli_llm is not None:
